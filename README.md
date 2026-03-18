@@ -10,7 +10,7 @@ for nits and consistency.
 
 ### DNS SOA serial number monitoring for Prometheus
 
-**dns-soa-check.sh
+**dns-soa-check.sh**
 
 I wanted to add several more authoritative nameservers for my domains and play
 with the delivery mechanisms. I also wanted to make sure they were all serving
@@ -21,7 +21,7 @@ zones out of line. See also dns-soa-check-alertmanager.txt for example rule.
 
 ### AMI MegaRAC BMC TLS certificate uploader
 
-**ami-bmc-cert-upload.py
+**ami-bmc-cert-upload.py**
 
 Uploads a TLS certificate/key to the BMC/out-of-band management unit
 on some system boards that use AMI MegaRAC. Originally I tried doing this via
@@ -32,7 +32,7 @@ KV2 store (see VAULT_TOKEN_FILE/VAULT_BMC_PATH), but you can also supply
 
 ### Supermicro IPMI certificate updater
 
-**smc-ipmi-updater.py
+**smc-ipmi-updater.py**
 
 Uploads a TLS certificate/key to the BMC/out-of-band management unit of
 Supermicro X10/X11 system boards. This is a fork of a fork of a fork, hopefully
