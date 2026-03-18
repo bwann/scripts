@@ -1,7 +1,7 @@
 # scripts
 Access to tools
 
-Tools to scripts and utilities that I use to make life and infra better. Some
+Scripts and utilities that I use to make life and infra better. Some
 of these I wrote, some were AI assisted, some were entirely AI written.
 
 These were written in an IPv6-first/only environment and tend to expect working
