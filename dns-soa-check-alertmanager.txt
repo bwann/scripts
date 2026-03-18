@@ -1,0 +1,17 @@
+#
+# example alert rule for dns-soa-check.sh
+#
+
+- alert: DNSSOASerialMismatch
+  expr: >-
+    (max by (zone) (dns_soa_serial{zone!~"dyn\\..*"})
+    - min by (zone) (dns_soa_serial{zone!~"dyn\\..*"})) > 0
+  for: 15m
+  labels:
+    severity: warning
+  annotations:
+    summary: SOA serial mismatch for zone {{ $labels.zone }}
+    description: >
+      Authoritative nameservers disagree on the SOA serial for
+      {{ $labels.zone }}. A zone transfer may be in progress or
+      a slave may be out of sync.
