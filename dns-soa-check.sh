@@ -16,6 +16,8 @@ ZONES=(
   example.com
   example1.com
   example2.com
+  1.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa
+  1.2.168.192.in-addr.arpa
 )
 
 SERVERS=(

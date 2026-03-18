@@ -1,4 +1,16 @@
 #
+# example node_exporter output
+#
+# Claude promises me the internal min/max math is done using the real integers
+# and this scientific notation is just a cosmetic thing here
+#
+dns_soa_serial{server="ns2.wann.net",zone="1.0.0.0.f.b.7.f.2.0.6.2.ip6.arpa"} 2.025118101e+09
+dns_soa_serial{server="ns2.wann.net",zone="as401420.net"} 2.026012001e+09
+dns_soa_serial{server="ns2.wann.net",zone="f.b.7.f.2.0.6.2.ip6.arpa"} 2.025111801e+09
+dns_soa_serial{server="ns2.wann.net",zone="wann.net"} 2.026030201e+09
+
+
+#
 # example alert rule for dns-soa-check.sh
 #
 
