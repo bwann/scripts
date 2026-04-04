@@ -8,6 +8,17 @@ These were written in an IPv6-first/only environment and tend to expect working
 IPv6. All of them should have been passed through shellcheck/pylint/black/etc
 for nits and consistency.
 
+### AMI MegaRAC BMC TLS certificate uploader
+
+**ami-bmc-cert-upload.py**
+
+Uploads a TLS certificate/key to the BMC/out-of-band management unit
+on some system boards that use AMI MegaRAC. Originally I tried doing this via
+Redfish but discovered my motherboard's BMC had its own cert store so I had to
+do it via HTTP. It supports fetching of OOB credentials from a Hashicorp Vault
+KV2 store (see VAULT_TOKEN_FILE/VAULT_BMC_PATH), but you can also supply
+--username/--password on the command line too.
+
 ### DNS SOA serial number monitoring for Prometheus
 
 **dns-soa-check.sh**
@@ -19,16 +30,14 @@ number of all specified zones from all nameservers and writes them to a file.
 Prometheus text-collector picks them up and does a min/max check to alert on
 zones out of line. See also dns-soa-check-alertmanager.txt for example rule.
 
-### AMI MegaRAC BMC TLS certificate uploader
+### Internet Archive collection tracker
 
-**ami-bmc-cert-upload.py**
+**ia-check**
 
-Uploads a TLS certificate/key to the BMC/out-of-band management unit
-on some system boards that use AMI MegaRAC. Originally I tried doing this via
-Redfish but discovered my motherboard's BMC had its own cert store so I had to
-do it via HTTP. It supports fetching of OOB credentials from a Hashicorp Vault
-KV2 store (see VAULT_TOKEN_FILE/VAULT_BMC_PATH), but you can also supply
---username/--password on the command line too.
+Compare Internet Archive (archive.org) collections for an uploader over
+time by fetching a list and storing in git. Useful to see when new things
+appear, change, or are taken down. Run from cron/systemd timer, ideally for
+use with a git server that e-mails you with diffs.
 
 ### Supermicro IPMI certificate updater
 

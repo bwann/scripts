@@ -1,0 +1,50 @@
+#!/bin/bash
+#
+# Compare Internet Archive (archive.org) collections for an uploader over
+# time by fetching a list and storing in git. Useful to see when new things
+# appear, change, or are taken down. Run from cron/systemd timer, ideally
+# for use with a git server that e-mails you with diffs.
+#
+# Set the $AUTHOR variable to the e-mail of the uploader to track.
+#
+# .
+# ├── bin
+# │   └── ia-check
+# ├── author1
+# ├── author2
+# └── author3
+#
+# Requires the `ia` command-line interface tool
+# (https://archive.org/developers/internetarchive/cli.html)
+#
+
+set -euo pipefail
+
+AUTHOR="${AUTHOR:-example@example.com}"
+REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+DATA_DIR="${REPO_DIR}/${AUTHOR}"
+ITEMS_FILE="$DATA_DIR/items.json"
+
+mkdir -p "$DATA_DIR"
+
+echo "Fetching items..."
+if ! ia search "uploader:${AUTHOR}" -f identifier,title,description | jq . > "$ITEMS_FILE.tmp"; then
+    echo "Error: ia search failed" >&2
+    rm -f "$ITEMS_FILE.tmp"
+    exit 1
+fi
+mv "$ITEMS_FILE.tmp" "$ITEMS_FILE"
+
+cd "$REPO_DIR"
+if git diff --quiet -- "$ITEMS_FILE" && ! git ls-files --error-unmatch "$ITEMS_FILE" &>/dev/null 2>&1; then
+    # New file, not yet tracked
+    git add "$ITEMS_FILE"
+    git commit -m "ia-check: initial items snapshot"
+    git push
+    echo "Initial snapshot committed and pushed."
+elif ! git diff --quiet -- "$ITEMS_FILE"; then
+    git add "$ITEMS_FILE"
+    git commit -m "ia-check: items changed $(date +%Y-%m-%d)"
+    git push
+    echo "Changes committed and pushed."
+fi
