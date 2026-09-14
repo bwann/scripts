@@ -130,7 +130,7 @@ class IPMIUpdater:  # pylint: disable=too-many-instance-attributes
             return self._csrf_token
 
         page_url = self.url_redirect_template % url_name
-        result = self.session.get(page_url)
+        result = self.session.get(page_url, timeout=REQUEST_TIMEOUT, verify=False)
         result.raise_for_status()
 
         match = re.search(
@@ -426,6 +426,8 @@ class IPMIX11Updater(IPMIUpdater):
 def create_updater(args):
     """Instantiate and return the appropriate updater for the detected or specified model."""
     session = requests.session()
+    if args.proxy:
+        session.proxies = {"http": args.proxy, "https": args.proxy}
 
     if args.model is None:
         model = determine_model(session, args.ipmi_url, args.debug)
@@ -468,10 +470,16 @@ def determine_model(session, ipmi_url, debug):
 def main():  # pylint: disable=too-many-branches,too-many-statements
     """Parse arguments and orchestrate the IPMI certificate update."""
     parser = argparse.ArgumentParser(
-        description="Update Supermicro IPMI SSL certificate"
+        description="Update Supermicro IPMI/BMC TLS certificate"
     )
     parser.add_argument("--ipmi-url", required=True, help="Supermicro IPMI 2.0 URL")
     parser.add_argument("--model", required=False, help="Board model, eg. X10 or X11")
+    parser.add_argument(
+        "--proxy",
+        default=None,
+        help="HTTP/HTTPS proxy URL to use for all requests, "
+        "e.g. http://proxy.example.com:3128 (for IPv4-only BMCs)",
+    )
     parser.add_argument("--key-file", required=True, help="X.509 Private key filename")
     parser.add_argument("--cert-file", required=True, help="X.509 Certificate filename")
     parser.add_argument(

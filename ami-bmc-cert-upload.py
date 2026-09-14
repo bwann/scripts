@@ -43,7 +43,6 @@ import http.cookiejar
 VAULT_TOKEN_FILE = "/etc/vault.d/oob-cert-installer-token"
 VAULT_BMC_PATH = "my-infra/oob"
 
-
 def die(msg):
     """Print an error message to stderr and exit with code 1."""
     print(f"ERROR: {msg}", file=sys.stderr)
@@ -172,12 +171,18 @@ def upload_certificate(
         + f"--{boundary}--\r\n".encode()
     )
 
+    base_url = bmc_url.rstrip("/")
     req = urllib.request.Request(
-        bmc_url.rstrip("/") + "/api/settings/ssl/certificate",
+        base_url + "/api/settings/ssl/certificate",
         data=body,
         headers={
             "Content-Type": f"multipart/form-data; boundary={boundary}",
             "X-CSRFTOKEN": csrf_token,
+            # Settings-changing endpoints 403 without these, even with a
+            # valid CSRF token and session -- the BMC checks Origin/Referer
+            # match its own hostname as an additional CSRF safeguard.
+            "Origin": base_url,
+            "Referer": base_url + "/",
         },
         method="POST",
     )
