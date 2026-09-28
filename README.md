@@ -54,7 +54,7 @@ but I haven't tried it.
 
 ### Ubiquiti EdgeSwitch TLS certificate deployment tool
 
-**edgeswitch-cert-deploy.py
+**edgeswitch-cert-deploy.py**
 
 For use with Let's Encrypt/acme.sh to automatically deploy new TLS certificates
 to EdgeSwitches automatically. This script scp's a cert+key file to an intermediate
