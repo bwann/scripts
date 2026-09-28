@@ -51,3 +51,17 @@ on the command line too.
 
 I hear this may be superseded by the Supermicro SuperServer Automation Assistant
 but I haven't tried it.
+
+### Ubiquiti EdgeSwitch TLS certificate deployment tool
+
+**edgeswitch-cert-deploy.py
+
+For use with Let's Encrypt/acme.sh to automatically deploy new TLS certificates
+to EdgeSwitches automatically. This script scp's a cert+key file to an intermediate
+TFTP server, logs into the EdgeSwitch to issue commands to fetch and install the
+cert+key from the TFTP server, then cleans up files from the TFTP server.
+
+<img src="edgeswitch-cert-deploy.jpg" width="600">
+
+Also useful for copying TLS cert files to a dual-stack TFTP server because the
+EdgeSwitch can only upload from an IPv4 TFTP/HTTP server.
